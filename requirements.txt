@@ -1,0 +1,4 @@
+lxml
+numpy
+python-dateutil
+setuptools_scm

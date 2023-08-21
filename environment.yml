@@ -1,0 +1,10 @@
+name: timescale
+channels:
+  - conda-forge
+dependencies:
+  - lxml
+  - numpy
+  - pip
+  - python>=3.6
+  - python-dateutil
+  - setuptools_scm
