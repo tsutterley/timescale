@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 u"""
 time.py
-Written by Tyler Sutterley (06/2023)
+Written by Tyler Sutterley (08/2023)
 Utilities for calculating time operations
 
 PYTHON DEPENDENCIES:

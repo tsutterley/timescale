@@ -18,6 +18,6 @@ Python tools for time and astronomical calculations
     :hidden:
     :caption: API Reference
 
-
+    api_reference/eop.rst
     api_reference/time.rst
     api_reference/utilities.rst
