@@ -22,3 +22,10 @@ Python tools for time and astronomical calculations
     api_reference/eop.rst
     api_reference/time.rst
     api_reference/utilities.rst
+
+.. toctree::
+    :maxdepth: 1
+    :hidden:
+    :caption: Release Notes
+
+    release_notes/Release-Notes.rst

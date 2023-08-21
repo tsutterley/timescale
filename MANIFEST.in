@@ -5,3 +5,4 @@ prune test*
 exclude *.cfg
 exclude *.yml
 include requirements.txt
+include version.txt
