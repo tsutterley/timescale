@@ -25,7 +25,7 @@ jobs:
         shell: bash -l {0}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up mamba ${{ matrix.python-version }}
       uses: mamba-org/setup-micromamba@v1
       with:
@@ -54,7 +54,7 @@ jobs:
             --username=${{ secrets.EARTHDATA_USERNAME }} \
             --password=${{ secrets.EARTHDATA_PASSWORD }}
     - name: Archive code coverage results
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: code-coverage-report
         path: ./coverage.xml
