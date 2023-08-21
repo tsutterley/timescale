@@ -7,4 +7,5 @@ dependencies:
   - pip
   - python>=3.6
   - python-dateutil
+  - scipy
   - setuptools_scm
