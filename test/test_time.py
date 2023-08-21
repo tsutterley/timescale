@@ -159,6 +159,7 @@ def test_timescale():
     ATLAS = timescale.time.Timescale().from_datetime(atlas_sdp_epoch)
     assert np.all(ATLAS.MJD == 58119)
     assert np.all(ATLAS.tide == 9497)
+    assert np.all(ATLAS.gps_week == 1982)
     delta_time_epochs = (ATLAS.to_datetime() - atlas_sdp_epoch)
     assert np.all(delta_time_epochs/np.timedelta64(1, 'ns') == 0)
     # from deltatime
