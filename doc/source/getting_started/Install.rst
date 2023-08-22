@@ -2,18 +2,30 @@
 Setup and Installation
 ======================
 
-Presently ``timescale`` is only available for use as a
-`GitHub repository <https://github.com/tsutterley/timescale>`_.
-The contents of the repository can be downloaded as a
-`zipped file <https://github.com/tsutterley/timescale/archive/main.zip>`_  or cloned.
+``timescale`` is available for download from the `GitHub repository <https://github.com/tsutterley/timescale>`_,
+the `Python Package Index (pypi) <https://pypi.org/project/timescale/>`_,
+and from `conda-forge <https://anaconda.org/conda-forge/timescale>`_.
 
-To use this repository, please fork into your own account and then clone onto your system:
+
+The simplest installation for most users will likely be using ``conda``:
+
+.. code-block:: bash
+
+    conda install -c conda-forge timescale
+
+``conda`` installed versions of ``timescale`` can be upgraded to the latest stable release:
+
+.. code-block:: bash
+
+    conda update timescale
+
+To use the development repository, please fork ``timescale`` into your own account and then clone onto your system:
 
 .. code-block:: bash
 
     git clone https://github.com/tsutterley/timescale.git
 
-Can then install using ``setuptools``:
+``timescale`` can then be installed within the package directory using ``setuptools``:
 
 .. code-block:: bash
 
@@ -25,7 +37,7 @@ or ``pip``
 
     python3 -m pip install --user .
 
-Alternatively can install the ``timescale`` utilities directly from GitHub with ``pip``:
+The development version of ``timescale`` can also be installed directly from GitHub using ``pip``:
 
 .. code-block:: bash
 

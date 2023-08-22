@@ -4,13 +4,21 @@ timescale
 
 |Language|
 |License|
+|PyPI Version|
+|Anaconda-Server|
 |Documentation Status|
 
-.. |Language| image:: https://img.shields.io/badge/python-v3.8-green.svg
+.. |Language| image:: https://img.shields.io/pypi/pyversions/pyTMD?color=green
    :target: https://www.python.org/
 
 .. |License| image:: https://img.shields.io/github/license/tsutterley/timescale
    :target: https://github.com/tsutterley/timescale/blob/main/LICENSE
+
+.. |PyPI Version| image:: https://img.shields.io/pypi/v/timescale.svg
+   :target: https://pypi.python.org/pypi/timescale/
+
+.. |Anaconda-Server| image:: https://img.shields.io/conda/vn/conda-forge/timescale
+   :target: https://anaconda.org/conda-forge/timescale
 
 .. |Documentation Status| image:: https://readthedocs.org/projects/timescale/badge/?version=latest
    :target: https://timescale.readthedocs.io/en/latest/?badge=latest
