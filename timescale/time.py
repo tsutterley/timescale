@@ -875,6 +875,13 @@ class Timescale:
         """
         return self.MJD + 2400000.5
 
+    @timescale.utilities.reify
+    def year(self):
+        """Universal Time (UT) as calendar year
+        """
+        Y, M, D, h, m, s = convert_julian(self.ut1, format='tuple')
+        return convert_calendar_decimal(Y, M, D, hour=h, minute=m, second=s)
+
     @property
     def turnasec(self):
         """Arcseconds in a full turn
