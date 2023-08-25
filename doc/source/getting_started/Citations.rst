@@ -16,6 +16,12 @@ following work:
     "Antarctic ice shelf thickness change from multimission lidar mapping", *The Cryosphere*,
     13, 1801--1817, (2019). `doi: 10.5194/tc-13-1801-2019 <https://doi.org/10.5194/tc-13-1801-2019>`_
 
+If you have used ``timescale`` in your work, please consider citing our library:
+
+    T. C. Sutterley, K. Alley, K. Brunt, S. Howard, L. Padman, and M. Siegfried,
+    "timescale: Python tools for time and astronomical calculations", (2023).
+    `doi: 10.5281/zenodo.8284224 <https://doi.org/10.5281/zenodo.8284224>`_
+
 Contributors
 ############
 

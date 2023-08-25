@@ -7,6 +7,7 @@ timescale
 |PyPI Version|
 |Anaconda-Server|
 |Documentation Status|
+|zenodo|
 
 .. |Language| image:: https://img.shields.io/pypi/pyversions/pyTMD?color=green
    :target: https://www.python.org/
@@ -22,6 +23,9 @@ timescale
 
 .. |Documentation Status| image:: https://readthedocs.org/projects/timescale/badge/?version=latest
    :target: https://timescale.readthedocs.io/en/latest/?badge=latest
+
+.. |zenodo| image:: https://zenodo.org/badge/681330279.svg
+   :target: https://zenodo.org/badge/latestdoi/681330279
 
 Python tools for time and astronomical calculations
 
