@@ -1,3 +1,18 @@
+/* color adjustments to fit logo theme */
+.wy-menu > .caption > span.caption-text {
+    color: #eeedf3;
+}
+.wy-nav-top {
+    background-color: #eeedf3;
+    color: #ffffff;
+}
+.wy-side-nav-search {
+    background-color: #221b38;
+}
+.wy-side-nav-search input[type="text"] {
+    border-color: #221b38;
+}
+
 /* fix for position of equation numbers
  * https://github.com/rtfd/sphinx_rtd_theme/issues/301
  */
