@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 u"""
 time.py
-Written by Tyler Sutterley (08/2023)
+Written by Tyler Sutterley (10/2023)
 Utilities for calculating time operations
 
 PYTHON DEPENDENCIES:
@@ -16,6 +16,8 @@ PROGRAM DEPENDENCIES:
     utilities.py: download and management utilities for syncing files
 
 UPDATE HISTORY:
+    Updated 10/2023: add function to convert from calendar dates
+        add min, max and mean functions to Timescale class
     Forked 08/2023: forked from pyTMD time utility functions
     Updated 06/2023: improve conversion of timescale to datetime arrays
     Updated 05/2023: add timescale class for converting between time scales
@@ -711,6 +713,41 @@ class Timescale:
             epoch1=epoch, epoch2=_mjd_epoch, scale=(1.0/self.day))
         return self
 
+    def from_calendar(self,
+        year: np.ndarray,
+        month: np.ndarray,
+        day: np.ndarray,
+        hour: np.ndarray | float = 0.0,
+        minute: np.ndarray | float = 0.0,
+        second: np.ndarray | float = 0.0,
+        ):
+        """
+        Converts calendar date arrays into a ``timescale`` object
+
+        Parameters
+        ----------
+        year: np.ndarray
+            calendar year
+        month: np.ndarray
+            month of the year
+        day: np.ndarray
+            day of the month
+        hour: np.ndarray or float, default 0.0
+            hour of the day
+        minute: np.ndarray or float, default 0.0
+            minute of the hour
+        second: np.ndarray or float, default 0.0
+            second of the minute
+        """
+        # calculate date in Modified Julian Days (MJD) from calendar date
+        # MJD: days since November 17, 1858 (1858-11-17T00:00:00)
+        self.MJD = 367.0*year - \
+            np.floor(1.75*(year + np.floor((month + 9.0)/12.0))) - \
+            np.floor(0.75*(np.floor((year + (month - 9.0)/7.0)/100.0) + 1.0)) + \
+            np.floor(275.0*month/9.0) + day + hour/24.0 + minute/1440.0 + \
+            second/86400.0 + 1721028.5 - 2400000.5
+        return self
+
     def from_datetime(self, dtime: np.ndarray):
         """
         Reads a ``datetime`` array and converts into a ``timescale`` object
@@ -723,6 +760,20 @@ class Timescale:
         # convert delta time array from datetime object
         # to days relative to 1992-01-01T00:00:00
         self.MJD = convert_datetime(dtime, epoch=_mjd_epoch)/self.day
+        return self
+
+    def from_list(self, temp):
+        """
+        Reads a list of ``timescale`` objects and converts into a single
+        ``timescale`` object
+
+        Parameters
+        ----------
+        temp: list
+            list of ``timescale`` objects
+        """
+        # convert list of timescale objects to a single timescale object
+        self.MJD = np.array([t.MJD for t in temp])
         return self
 
     def to_deltatime(self,
@@ -770,6 +821,19 @@ class Timescale:
         delta_time = np.atleast_1d(self.MJD*self.day*1e9).astype(np.int64)
         # return the datetime array
         return np.array(epoch + delta_time.astype('timedelta64[ns]'))
+
+    def to_string(self, unit: str = 's', **kwargs):
+        """
+        Convert a ``timescale`` object to a formatted string array
+
+        Parameters
+        ----------
+        unit: str, default 's'
+            datetime unit for output string array
+        **kwargs: dict
+            keyword arguments for datetime formatting
+        """
+        return np.datetime_as_string(self.to_datetime(), unit=unit, **kwargs)
 
     # PURPOSE: calculate the sum of a polynomial function of time
     def polynomial_sum(self, coefficients: list | np.ndarray, t: np.ndarray):
@@ -881,6 +945,21 @@ class Timescale:
         """
         Y, M, D, h, m, s = convert_julian(self.ut1, format='tuple')
         return convert_calendar_decimal(Y, M, D, hour=h, minute=m, second=s)
+
+    def min(self):
+        """Minimum time value as a ``timescale`` object
+        """
+        return Timescale(MJD=np.nanmin(self.MJD))
+
+    def max(self):
+        """Maximum time value as a ``timescale`` object
+        """
+        return Timescale(MJD=np.nanmax(self.MJD))
+
+    def mean(self):
+        """Mean time value as a ``timescale`` object
+        """
+        return Timescale(MJD=np.nanmean(self.MJD))
 
     @property
     def turnasec(self):
@@ -1047,7 +1126,7 @@ def get_leap_seconds(truncate: bool = True):
     # convert from time of 2nd leap second to time of 1st leap second
     leap_GPS = convert_delta_time(leap_UTC + TAI_UTC - TAI_GPS - 1,
         epoch1=_ntp_epoch, epoch2=_gps_epoch)
-    # return the GPS times of leap second occurance
+    # return the GPS times of leap second occurrence
     if truncate:
         return leap_GPS[leap_GPS >= 0].astype(np.float64)
     else:
