@@ -891,7 +891,7 @@ class Timescale:
 
     @timescale.utilities.reify
     def J2000(self):
-        """Seconds since 2000-01-0  1T12:00:00
+        """Seconds since 2000-01-01T12:00:00
         """
         return (self.tt - 2451545.0)*self.day
 
