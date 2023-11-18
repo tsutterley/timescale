@@ -50,6 +50,14 @@ General Methods
 
 .. autofunction:: timescale.utilities.from_ftp
 
+.. autofunction:: timescale.utilities._create_default_ssl_context
+
+.. autofunction:: timescale.utilities._create_ssl_context_no_verify
+
+.. autofunction:: timescale.utilities._set_ssl_context_options
+
+.. autofunction:: timescale.utilities.check_connection
+
 .. autofunction:: timescale.utilities.http_list
 
 .. autofunction:: timescale.utilities.from_http
