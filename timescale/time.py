@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 u"""
 time.py
-Written by Tyler Sutterley (10/2023)
+Written by Tyler Sutterley (02/2024)
 Utilities for calculating time operations
 
 PYTHON DEPENDENCIES:
@@ -16,6 +16,7 @@ PROGRAM DEPENDENCIES:
     utilities.py: download and management utilities for syncing files
 
 UPDATE HISTORY:
+    Updated 02/2024: move the immutable parameters in timescale class
     Updated 10/2023: add function to convert from calendar dates
         add min, max and mean functions to Timescale class
     Forked 08/2023: forked from pyTMD time utility functions
@@ -561,7 +562,7 @@ def convert_julian(JD: np.ndarray, **kwargs):
     else:
         single_value = False
 
-    # verify julian day
+    # verify Julian day
     JDO = np.floor(JD + 0.5)
     C = np.zeros_like(JD)
     # calculate C for dates before and after the switch to Gregorian
@@ -625,38 +626,25 @@ class Timescale:
         Number of leap seconds
     MJD: np.ndarray
         Modified Julian Days
-    century: float
-        Days in a Julian century
-    day: float
-        Seconds in a day
-    turn: float
-        Fraction of a full turn
-    turndeg: float
-        Degrees in a full turn
-    tau: float
-        Radians in a full turn
-    deg2rad: float
-        Degrees to radians
-    deg2asec: float
-        Degrees to arcseconds
     """
+    # Julian century
+    century = 36525.0
+    # seconds per day
+    day = 86400.0
+    # 360 degrees
+    turn = 1.0
+    turndeg = 360.0
+    tau = 2.0*np.pi
+    # degrees to radians
+    deg2rad = np.pi/180.0
+    # degrees to arcseconds
+    deg2asec = 3600.0
+
     def __init__(self, MJD=None):
         # leap seconds
         self.leaps = None
         # modified Julian Days
         self.MJD = MJD
-        # Julian century
-        self.century = 36525.0
-        # seconds per day
-        self.day = 86400.0
-        # 360 degrees
-        self.turn = 1.0
-        self.turndeg = 360.0
-        self.tau = 2.0*np.pi
-        # degrees to radians
-        self.deg2rad = np.pi/180.0
-        # degrees to arcseconds
-        self.deg2asec = 3600.0
         # iterator
         self.__index__ = 0
 
@@ -666,7 +654,7 @@ class Timescale:
             standard: str = 'UTC'
         ):
         """
-        Converts a delta time array and into a ``timescale`` object
+        Converts a delta time array and into a ``Timescale`` object
 
         Parameters
         ----------
@@ -722,7 +710,7 @@ class Timescale:
         second: np.ndarray | float = 0.0,
         ):
         """
-        Converts calendar date arrays into a ``timescale`` object
+        Converts calendar date arrays into a ``Timescale`` object
 
         Parameters
         ----------
@@ -750,7 +738,7 @@ class Timescale:
 
     def from_datetime(self, dtime: np.ndarray):
         """
-        Reads a ``datetime`` array and converts into a ``timescale`` object
+        Reads a ``datetime`` array and converts into a ``Timescale`` object
 
         Parameters
         ----------
@@ -764,13 +752,13 @@ class Timescale:
 
     def from_list(self, temp):
         """
-        Reads a list of ``timescale`` objects and converts into a single
-        ``timescale`` object
+        Reads a list of ``Timescale`` objects and converts into a single
+        ``Timescale`` object
 
         Parameters
         ----------
         temp: list
-            list of ``timescale`` objects
+            list of ``Timescale`` objects
         """
         # convert list of timescale objects to a single timescale object
         self.MJD = np.array([t.MJD for t in temp])
@@ -781,7 +769,7 @@ class Timescale:
             scale: float = 1.0
         ):
         """
-        Convert a ``timescale`` object to a delta time array
+        Convert a ``Timescale`` object to a delta time array
 
         Parameters
         ----------
@@ -808,7 +796,7 @@ class Timescale:
 
     def to_datetime(self):
         """
-        Convert a ``timescale`` object to a ``datetime`` array
+        Convert a ``Timescale`` object to a ``datetime`` array
 
         Returns
         -------
@@ -824,7 +812,7 @@ class Timescale:
 
     def to_string(self, unit: str = 's', **kwargs):
         """
-        Convert a ``timescale`` object to a formatted string array
+        Convert a ``Timescale`` object to a formatted string array
 
         Parameters
         ----------
@@ -947,17 +935,17 @@ class Timescale:
         return convert_calendar_decimal(Y, M, D, hour=h, minute=m, second=s)
 
     def min(self):
-        """Minimum time value as a ``timescale`` object
+        """Minimum time value as a ``Timescale`` object
         """
         return Timescale(MJD=np.nanmin(self.MJD))
 
     def max(self):
-        """Maximum time value as a ``timescale`` object
+        """Maximum time value as a ``Timescale`` object
         """
         return Timescale(MJD=np.nanmax(self.MJD))
 
     def mean(self):
-        """Mean time value as a ``timescale`` object
+        """Mean time value as a ``Timescale`` object
         """
         return Timescale(MJD=np.nanmean(self.MJD))
 
@@ -981,25 +969,26 @@ class Timescale:
 
     @property
     def dtype(self):
-        """Main data type of ``timescale`` object"""
+        """Main data type of ``Timescale`` object"""
         return self.MJD.dtype
 
     @property
     def shape(self):
-        """Dimensions of ``timescale`` object
+        """Dimensions of ``Timescale`` object
         """
         return np.shape(self.MJD)
 
     @property
     def ndim(self):
-        """Number of dimensions in ``timescale`` object
+        """Number of dimensions in ``Timescale`` object
         """
         return np.ndim(self.MJD)
 
     def __str__(self):
-        """String representation of Timescale object
+        """String representation of the ``Timescale`` object
         """
-        return f"""Timescale object with {len(self)} time values"""
+        properties = ['timescale.time.Timescale']
+        return '\n'.join(properties)
 
     def __len__(self):
         """Number of time values
@@ -1015,7 +1004,7 @@ class Timescale:
     def __next__(self):
         """Get the next time step
         """
-        temp = timescale()
+        temp = Timescale()
         try:
             temp.MJD = np.atleast_1d(self.MJD)[self.__index__].copy()
         except IndexError as exc:
@@ -1054,7 +1043,7 @@ def interpolate_delta_time(
     delta_file = pathlib.Path(delta_file).expanduser().absolute()
     dinput = np.loadtxt(delta_file)
     # calculate Julian days and then convert to days since 1992-01-01T00:00:00
-    days = timescale.time.convert_calendar_dates(
+    days = convert_calendar_dates(
         dinput[:,0], dinput[:,1], dinput[:,2],
         epoch=_tide_epoch)
     # use scipy interpolating splines to interpolate delta times
@@ -1521,20 +1510,16 @@ def iers_delta_time(
     fid = daily_file.open(mode='w', encoding='utf8')
     # connect to http host for IERS Bulletin-A files
     HOST = 'https://datacenter.iers.org/availableVersions.php?id=6'
-    bulletin_files,_ = timescale.utilities.iers_list(HOST,
-        timeout=timeout
-    )
+    bulletin_files,_ = timescale.utilities.iers_list(HOST, timeout=timeout)
     # for each Bulletin-A file
     for f in bulletin_files:
         logging.info(f)
-        remote_buffer = timescale.utilities.from_http(f,
-            timeout=timeout
-        )
+        remote_buffer = timescale.utilities.from_http(f, timeout=timeout)
         # read Bulletin-A file from BytesIO object
-        YY, MM, DD, DELTAT = read_iers_bulletin_a(remote_buffer)
+        YY,MM,DD,DELTAT = read_iers_bulletin_a(remote_buffer)
         # print delta time for week to output file
-        for Y, M, D, T in zip(YY, MM, DD, DELTAT):
-            print(f' {Y:4.0f} {M:2.0f} {D:2.0f} {T:7.4f}', file=fid)
+        for Y,M,D,T in zip(YY,MM,DD,DELTAT):
+            print(file_format.format(Y,M,D,T), file=fid)
         # close the bytesIO object
         remote_buffer.close()
     # close the output file
@@ -1547,7 +1532,6 @@ def cddis_delta_time(
         daily_file: str | pathlib.Path,
         username: str | None = None,
         password: str | None = None,
-        timeout: int | None = 120,
         verbose: bool = False,
         mode: oct = 0o775
     ):
@@ -1568,8 +1552,6 @@ def cddis_delta_time(
         NASA Earthdata username
     password: str or NoneType, default None
         NASA Earthdata password
-    timeout: int, default 120
-        timeout in seconds for blocking operations
     verbose: bool, default False
         print file information about output file
     mode: oct, default 0o775
@@ -1592,12 +1574,10 @@ def cddis_delta_time(
     # open output daily delta time file
     daily_file = pathlib.Path(daily_file).expanduser().absolute()
     fid = daily_file.open(mode='w', encoding='utf8')
+    file_format = ' {0:4.0f} {1:2.0f} {2:2.0f} {3:7.4f}'
     # for each subdirectory
-    subdirectory, mtimes = timescale.utilities.cddis_list(HOST,
-        build=False,
-        timeout=timeout,
-        pattern=R1
-    )
+    subdirectory, mtimes = timescale.utilities.cddis_list(
+        HOST, build=False, pattern=R1)
     # extract roman numerals from subdirectories
     roman = [R1.findall(s).pop() for s in subdirectory]
     # sort the list of Roman numerals
@@ -1607,26 +1587,20 @@ def cddis_delta_time(
     for SUB in subdirectory:
         # find Bulletin-A files in https subdirectory
         HOST.append(SUB)
-        bulletin_files, mtimes = timescale.utilities.cddis_list(HOST,
-            build=False,
-            timeout=timeout,
-            sort=True,
-            pattern=R2
-        )
+        bulletin_files, mtimes = timescale.utilities.cddis_list(
+            HOST, build=False, sort=True, pattern=R2)
         # for each Bulletin-A file
         for f in sorted(bulletin_files):
             logging.info(f)
             # copy remote file contents to BytesIO object
             HOST.append(f)
             remote_buffer = timescale.utilities.from_cddis(HOST,
-                build=False,
-                timeout=timeout
-            )
+                build=False,timeout=20)
             # read Bulletin-A file from BytesIO object
-            YY, MM, DD, DELTAT = read_iers_bulletin_a(remote_buffer)
+            YY,MM,DD,DELTAT = read_iers_bulletin_a(remote_buffer)
             # print delta time for week to output file
-            for Y, M, D, T in zip(YY, MM, DD, DELTAT):
-                print(f' {Y:4.0f} {M:2.0f} {D:2.0f} {T:7.4f}', file=fid)
+            for Y,M,D,T in zip(YY,MM,DD,DELTAT):
+                print(file_format.format(Y,M,D,T),file=fid)
             # close the bytesIO object
             remote_buffer.close()
             # remove the file from the list
@@ -1712,22 +1686,20 @@ def read_iers_bulletin_a(fileID):
     # TAI time is ahead of GPS by 19 seconds
     TAI_GPS = 19.0
     # calculate calendar dates from Modified Julian days
-    Y, M, D, h, m, s = convert_julian(MJD[:valid] + 2400000.5, format='tuple')
+    Y,M,D,h,m,s = convert_julian(MJD[:valid]+2400000.5, format='tuple')
     # calculate GPS Time (seconds since 1980-01-06T00:00:00)
     # by converting the Modified Julian days (days since 1858-11-17T00:00:00)
-    GPS_Time = convert_delta_time(MJD[:valid]*8.64e4,
-        epoch1=_mjd_epoch,
-        epoch2=_gps_epoch,
-        scale=1.0) + \
-        TAI_UTC - TAI_GPS
+    GPS_Time = convert_delta_time(MJD[:valid]*8.64e4, epoch1=_mjd_epoch,
+        epoch2=_gps_epoch, scale=1.0) + TAI_UTC - TAI_GPS
     # number of leap seconds between GPS and UTC
     # this finds the daily correction for weeks with leap seconds
     GPS_UTC = count_leap_seconds(GPS_Time)
     # calculate delta time (TT - UT1) -->
     # (TT-TAI) + (TAI-GPS) + (GPS-UTC) - (UT1-UTC)
     DELTAT = TT_TAI + TAI_GPS + GPS_UTC - UT1_UTC[:valid]
+
     # return dates and delta times
-    return (Y, M, D, DELTAT)
+    return (Y,M,D,DELTAT)
 
 # PURPOSE: connects to servers and downloads latest Bulletin-A file
 def update_bulletin_a(
@@ -1761,13 +1733,8 @@ def update_bulletin_a(
     # try downloading from IERS Rapid Service/Prediction Center (RS/PC)
     REMOTE = ['https://maia.usno.navy.mil','ser7','ser7.dat']
     try:
-        timescale.utilities.from_http(REMOTE,
-            timeout=timeout,
-            local=LOCAL,
-            hash=HASH,
-            verbose=verbose,
-            mode=mode
-        )
+        timescale.utilities.from_http(REMOTE, timeout=timeout, local=LOCAL,
+            hash=HASH, verbose=verbose, mode=mode)
     except Exception as exc:
         logging.debug(traceback.format_exc())
         pass
@@ -1827,8 +1794,7 @@ def pull_deltat_file(
             local=LOCAL,
             hash=HASH,
             verbose=verbose,
-            mode=mode
-        )
+            mode=mode)
     except Exception as exc:
         logging.debug(traceback.format_exc())
         pass
@@ -1849,8 +1815,7 @@ def pull_deltat_file(
                 local=LOCAL,
                 hash=HASH,
                 verbose=verbose,
-                mode=mode
-            )
+                mode=mode)
         except Exception as exc:
             logging.debug(traceback.format_exc())
             pass
@@ -1868,8 +1833,7 @@ def pull_deltat_file(
             local=LOCAL,
             hash=HASH,
             verbose=verbose,
-            mode=mode
-        )
+            mode=mode)
     except Exception as exc:
         logging.debug(traceback.format_exc())
         pass
