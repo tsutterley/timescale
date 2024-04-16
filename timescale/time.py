@@ -17,6 +17,7 @@ PROGRAM DEPENDENCIES:
 
 UPDATE HISTORY:
     Updated 04/2024: added quarter year approximate conversions
+        added _from_sec dictionary for named time units
     Updated 02/2024: move the immutable parameters in timescale class
     Updated 10/2023: add function to convert from calendar dates
         add min, max and mean functions to Timescale class
@@ -88,6 +89,8 @@ _to_sec['year'] = 365.25 * 86400.0
 _to_sec['years'] = 365.25 * 86400.0
 _to_sec['quarter'] = 365.25 * 86400.0 / 4.0
 _to_sec['quarters'] = 365.25 * 86400.0 / 4.0
+# conversion factors from seconds to named time units
+_from_sec = {k: 1.0/v for k,v in _to_sec.items()}
 
 # standard epochs
 _mjd_epoch = (1858, 11, 17, 0, 0, 0)
