@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 u"""
 time.py
-Written by Tyler Sutterley (02/2024)
+Written by Tyler Sutterley (04/2024)
 Utilities for calculating time operations
 
 PYTHON DEPENDENCIES:
@@ -16,6 +16,7 @@ PROGRAM DEPENDENCIES:
     utilities.py: download and management utilities for syncing files
 
 UPDATE HISTORY:
+    Updated 04/2024: added quarter year approximate conversions
     Updated 02/2024: move the immutable parameters in timescale class
     Updated 10/2023: add function to convert from calendar dates
         add min, max and mean functions to Timescale class
@@ -85,6 +86,8 @@ _to_sec['common_year'] = 365.0 * 86400.0
 _to_sec['common_years'] = 365.0 * 86400.0
 _to_sec['year'] = 365.25 * 86400.0
 _to_sec['years'] = 365.25 * 86400.0
+_to_sec['quarter'] = 365.25 * 86400.0 / 4.0
+_to_sec['quarters'] = 365.25 * 86400.0 / 4.0
 
 # standard epochs
 _mjd_epoch = (1858, 11, 17, 0, 0, 0)
