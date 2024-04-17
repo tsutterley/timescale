@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 u"""
 eop.py
-Written by Tyler Sutterley (08/2023)
+Written by Tyler Sutterley (04/2024)
 Utilities for maintaining and calculating Earth Orientation Parameters (EOP)
 
 PYTHON DEPENDENCIES:
@@ -14,7 +14,7 @@ PROGRAM DEPENDENCIES:
     utilities.py: download and management utilities for syncing files
 
 UPDATE HISTORY:
-    Forked 08/2023: forked from pyTMD EOP utility functions
+    Updated 04/2024: fixed annotations with multiple types
     Updated 04/2023: using pathlib to define and expand paths
         add wrapper function for interpolating daily EOP values
         have mean pole and finals file as attributes of EOP module
@@ -217,9 +217,9 @@ def pull_pole_coordinates(FILE: str, verbose: bool = False):
 
 # PURPOSE: connects to servers and downloads finals files
 def update_finals_file(
-        username: str or None = None,
-        password: str or None = None,
-        timeout: int or None = 20,
+        username: str | None = None,
+        password: str | None = None,
+        timeout: int | None = 20,
         verbose: bool = False,
         mode: oct = 0o775
     ):

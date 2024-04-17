@@ -18,6 +18,8 @@ PROGRAM DEPENDENCIES:
 UPDATE HISTORY:
     Updated 04/2024: added quarter year approximate conversions
         added _from_sec dictionary for named time units
+        replaced deprecated datetime.datetime.utcnow
+        updated urls and ftp links for updating the leap seconds list
     Updated 02/2024: move the immutable parameters in timescale class
     Updated 10/2023: add function to convert from calendar dates
         add min, max and mean functions to Timescale class
@@ -1111,7 +1113,7 @@ def get_leap_seconds(truncate: bool = True):
             if re.match(r'^(?=#@)',i)]
     # check that leap seconds file is still valid
     expiry = datetime.datetime(*_ntp_epoch) + datetime.timedelta(seconds=int(secs))
-    today = datetime.datetime.utcnow()
+    today = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
     update_leap_seconds() if (expiry < today) else None
     # get leap seconds
     leap_UTC,TAI_UTC = np.loadtxt(leap_secs).T
@@ -1140,8 +1142,9 @@ def update_leap_seconds(
 
     Servers and Mirrors
 
-    - ftp://ftp.nist.gov/pub/time/leap-seconds.list
-    - https://www.ietf.org/timezones/data/leap-seconds.list
+    - ftp://ftp.boulder.nist.gov/pub/time/leap-seconds.list
+    - https://hpiers.obspm.fr/iers/bul/bulc/ntp/leap-seconds.list
+    - https://data.iana.org/time-zones/data/leap-seconds.list
 
     Parameters
     ----------
@@ -1157,8 +1160,8 @@ def update_leap_seconds(
     LOCAL = timescale.utilities.get_data_path(['data',FILE])
     HASH = timescale.utilities.get_hash(LOCAL)
 
-    # try downloading from NIST ftp servers
-    HOST = ['ftp.nist.gov','pub','time',FILE]
+    # try downloading from NIST Boulder ftp servers
+    HOST = ['ftp.boulder.nist.gov','pub','time',FILE]
     try:
         timescale.utilities.check_ftp_connection(HOST[0])
         timescale.utilities.from_ftp(HOST,
@@ -1172,9 +1175,24 @@ def update_leap_seconds(
         pass
     else:
         return
-
-    # try downloading from Internet Engineering Task Force (IETF) mirror
-    REMOTE = ['https://www.ietf.org','timezones','data',FILE]
+    
+    # try downloading from Paris Observatory IERS Centers
+    REMOTE = ['https://hpiers.obspm.fr','iers','bul','bulc','ntp',FILE]
+    try:
+        timescale.utilities.from_http(REMOTE,
+            timeout=timeout,
+            local=LOCAL,
+            hash=HASH,
+            verbose=verbose,
+            mode=mode)
+    except Exception as exc:
+        logging.debug(traceback.format_exc())
+        pass
+    else:
+        return
+    
+    # try downloading from Internet Assigned Numbers Authority (IANA)
+    REMOTE = ['https://data.iana.org','time-zones','data',FILE]
     try:
         timescale.utilities.from_http(REMOTE,
             timeout=timeout,
@@ -1514,6 +1532,7 @@ def iers_delta_time(
     # open output daily delta time file
     daily_file = pathlib.Path(daily_file).expanduser().absolute()
     fid = daily_file.open(mode='w', encoding='utf8')
+    file_format = ' {0:4.0f} {1:2.0f} {2:2.0f} {3:7.4f}'
     # connect to http host for IERS Bulletin-A files
     HOST = 'https://datacenter.iers.org/availableVersions.php?id=6'
     bulletin_files,_ = timescale.utilities.iers_list(HOST, timeout=timeout)
