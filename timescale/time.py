@@ -18,6 +18,7 @@ PROGRAM DEPENDENCIES:
 UPDATE HISTORY:
     Updated 04/2024: added quarter year approximate conversions
         added _from_sec dictionary for named time units
+        replaced deprecated datetime.datetime.utcnow
     Updated 02/2024: move the immutable parameters in timescale class
     Updated 10/2023: add function to convert from calendar dates
         add min, max and mean functions to Timescale class
@@ -1111,7 +1112,7 @@ def get_leap_seconds(truncate: bool = True):
             if re.match(r'^(?=#@)',i)]
     # check that leap seconds file is still valid
     expiry = datetime.datetime(*_ntp_epoch) + datetime.timedelta(seconds=int(secs))
-    today = datetime.datetime.utcnow()
+    today = datetime.datetime.now(datetime.timezone.utc)
     update_leap_seconds() if (expiry < today) else None
     # get leap seconds
     leap_UTC,TAI_UTC = np.loadtxt(leap_secs).T
