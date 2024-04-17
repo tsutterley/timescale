@@ -1112,7 +1112,7 @@ def get_leap_seconds(truncate: bool = True):
             if re.match(r'^(?=#@)',i)]
     # check that leap seconds file is still valid
     expiry = datetime.datetime(*_ntp_epoch) + datetime.timedelta(seconds=int(secs))
-    today = datetime.datetime.now(datetime.timezone.utc)
+    today = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
     update_leap_seconds() if (expiry < today) else None
     # get leap seconds
     leap_UTC,TAI_UTC = np.loadtxt(leap_secs).T
@@ -1515,6 +1515,7 @@ def iers_delta_time(
     # open output daily delta time file
     daily_file = pathlib.Path(daily_file).expanduser().absolute()
     fid = daily_file.open(mode='w', encoding='utf8')
+    file_format = ' {0:4.0f} {1:2.0f} {2:2.0f} {3:7.4f}'
     # connect to http host for IERS Bulletin-A files
     HOST = 'https://datacenter.iers.org/availableVersions.php?id=6'
     bulletin_files,_ = timescale.utilities.iers_list(HOST, timeout=timeout)
