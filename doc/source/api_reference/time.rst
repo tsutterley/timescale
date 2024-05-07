@@ -68,6 +68,9 @@ General Methods
 .. autoclass:: timescale.time.Timescale
    :members:
 
+.. autoclass:: timescale.time.Calendar
+   :members:
+
 .. autofunction:: timescale.time.interpolate_delta_time
 
 .. autofunction:: timescale.time.count_leap_seconds
