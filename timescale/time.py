@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 u"""
 time.py
-Written by Tyler Sutterley (04/2024)
+Written by Tyler Sutterley (05/2024)
 Utilities for calculating time operations
 
 PYTHON DEPENDENCIES:
@@ -16,6 +16,7 @@ PROGRAM DEPENDENCIES:
     utilities.py: download and management utilities for syncing files
 
 UPDATE HISTORY:
+    Updated 05/2024: add Calendar class to mimick datetime functions
     Updated 04/2024: added quarter year approximate conversions
         added _from_sec dictionary for named time units
         replaced deprecated datetime.datetime.utcnow
@@ -772,6 +773,12 @@ class Timescale:
         self.MJD = np.array([t.MJD for t in temp])
         return self
 
+    def to_calendar(self):
+        """
+        Convert a ``Timescale`` object to a ``Calendar`` object
+        """
+        return Calendar(self.ut1)
+
     def to_deltatime(self,
             epoch: str | tuple | list | np.ndarray,
             scale: float = 1.0
@@ -1020,6 +1027,23 @@ class Timescale:
         # add to index
         self.__index__ += 1
         return temp
+
+class Calendar:
+    """
+    Class for converting from Julian dates to calendar dates
+    """
+    def __init__(self, ut1=None):
+        # Julian Days
+        self.ut1 = ut1
+        self.from_julian()
+
+    def from_julian(self):
+        """
+        Converts from Julian dates to calendar dates
+        """
+        # convert Julian date to calendar
+        for key, val in convert_julian(self.ut1).items():
+            setattr(self, key, val)
 
 # PURPOSE: calculate the difference between universal time and dynamical time
 # by interpolating a delta time file to a given date
