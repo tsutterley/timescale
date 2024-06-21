@@ -744,6 +744,13 @@ class Timescale:
         second: np.ndarray or float, default 0.0
             second of the minute
         """
+        # verify input data types
+        year = np.array(year, dtype=np.float64)
+        month = np.array(month, dtype=np.float64)
+        day = np.array(day, dtype=np.float64)
+        hour = np.array(hour, dtype=np.float64)
+        minute = np.array(minute, dtype=np.float64)
+        second = np.array(second, dtype=np.float64)
         # calculate date in Modified Julian Days (MJD) from calendar date
         # MJD: days since November 17, 1858 (1858-11-17T00:00:00)
         self.MJD = 367.0*year - \
