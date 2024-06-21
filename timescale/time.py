@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 u"""
 time.py
-Written by Tyler Sutterley (05/2024)
+Written by Tyler Sutterley (06/2024)
 Utilities for calculating time operations
 
 PYTHON DEPENDENCIES:
@@ -16,6 +16,7 @@ PROGRAM DEPENDENCIES:
     utilities.py: download and management utilities for syncing files
 
 UPDATE HISTORY:
+    Updated 06/2024: assert that year, month, day, etc are float64
     Updated 05/2024: add Calendar class to mimick datetime functions
     Updated 04/2024: added quarter year approximate conversions
         added _from_sec dictionary for named time units
@@ -337,6 +338,13 @@ def convert_calendar_dates(
     delta_time: np.ndarray
         time since epoch
     """
+    # verify input data types
+    year = np.array(year, dtype=np.float64)
+    month = np.array(month, dtype=np.float64)
+    day = np.array(day, dtype=np.float64)
+    hour = np.array(hour, dtype=np.float64)
+    minute = np.array(minute, dtype=np.float64)
+    second = np.array(second, dtype=np.float64)
     # calculate date in Modified Julian Days (MJD) from calendar date
     # MJD: days since November 17, 1858 (1858-11-17T00:00:00)
     MJD = 367.0*year - np.floor(7.0*(year + np.floor((month+9.0)/12.0))/4.0) - \
@@ -465,7 +473,7 @@ def convert_calendar_decimal(
         # the -1 will make the diagonal == 0
         # i.e. first row == all zeros and the
         # last row == ones for all but the last element
-        mon_mat=np.tri(12,12,-1)
+        mon_mat = np.tri(12,12,-1)
         # using a dot product to calculate total number of days
         # for the months before the input date
         # basically is sum(i*dpm)
@@ -736,6 +744,13 @@ class Timescale:
         second: np.ndarray or float, default 0.0
             second of the minute
         """
+        # verify input data types
+        year = np.array(year, dtype=np.float64)
+        month = np.array(month, dtype=np.float64)
+        day = np.array(day, dtype=np.float64)
+        hour = np.array(hour, dtype=np.float64)
+        minute = np.array(minute, dtype=np.float64)
+        second = np.array(second, dtype=np.float64)
         # calculate date in Modified Julian Days (MJD) from calendar date
         # MJD: days since November 17, 1858 (1858-11-17T00:00:00)
         self.MJD = 367.0*year - \
