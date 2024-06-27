@@ -11,5 +11,30 @@ import timescale.time
 import timescale.utilities
 import timescale.version
 
+# shortcut wrapper functions for timescale.time.Timescale methods
+# delta time
+def from_deltatime(*args, **kwargs):
+    """Wrapper for ``timescale.time.Timescale().from_deltatime``
+    """
+    return timescale.time.Timescale().from_deltatime(*args, **kwargs)
+# Julian dates
+def from_julian(ut1, **kwargs):
+    return timescale.time.Timescale(ut1 - 2400000.5)
+# calendar dates
+def from_calendar(*args, **kwargs):
+    """Wrapper for ``timescale.time.Timescale().from_calendar``
+    """
+    return timescale.time.Timescale().from_calendar(*args, **kwargs)
+# datetime arrays
+def from_datetime(*args, **kwargs):
+    """Wrapper for ``timescale.time.Timescale().from_datetime``
+    """
+    return timescale.time.Timescale().from_datetime(*args, **kwargs)
+# list of timescale objects
+def from_list(*args, **kwargs):
+    """Wrapper for ``timescale.time.Timescale().from_list``
+    """
+    return timescale.time.Timescale().from_list(*args, **kwargs)
+
 # get semantic version from setuptools-scm
 __version__ = timescale.version.version

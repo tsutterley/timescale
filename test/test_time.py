@@ -162,17 +162,23 @@ def test_timescale():
     assert np.all(ATLAS.gps_week == 1982)
     delta_time_epochs = (ATLAS.to_datetime() - atlas_sdp_epoch)
     assert np.all(delta_time_epochs/np.timedelta64(1, 'ns') == 0)
+    SHORTCUT = timescale.from_datetime(atlas_sdp_epoch)
+    assert np.all(ATLAS.MJD == SHORTCUT.MJD)
     # from deltatime
     ATLAS = timescale.time.Timescale().from_deltatime(0, epoch=(2018,1,1))
     assert np.all(ATLAS.MJD == 58119)
     assert np.all(ATLAS.tide == 9497)
     delta_time_epochs = (ATLAS.to_datetime() - atlas_sdp_epoch)
     assert np.all(delta_time_epochs/np.timedelta64(1, 'ns') == 0)
+    SHORTCUT = timescale.from_deltatime(0, epoch=(2018,1,1))
+    assert np.all(ATLAS.MJD == SHORTCUT.MJD)
     # from MJD
     ATLAS = timescale.time.Timescale(MJD=58119)
     assert np.all(ATLAS.ut1 == 2458119.5)
     assert np.all(ATLAS.tide == 9497)
     assert np.all((ATLAS.MJD - 51544.5) == (ATLAS.ut1 - 2451545.0))
+    SHORTCUT = timescale.from_julian(2458119.5)
+    assert np.all(ATLAS.MJD == SHORTCUT.MJD)
     # from MJD hourly array
     delta_time = np.arange(0, 365, 1.0/24.0)
     ATLAS = timescale.time.Timescale(MJD=58119 + delta_time)
@@ -180,6 +186,8 @@ def test_timescale():
     assert np.allclose(delta_time_epochs/np.timedelta64(1, 'D'), delta_time)
     assert np.allclose(ATLAS.to_deltatime(epoch=atlas_sdp_epoch), delta_time)
     assert np.allclose(ATLAS.to_deltatime(epoch='2018-01-01'), delta_time)
+    SHORTCUT = timescale.from_julian(2458119.5 + delta_time)
+    assert np.allclose(ATLAS.MJD, SHORTCUT.MJD)
     # check constants
     assert (ATLAS.century == 36525.0)
     assert (ATLAS.day == 86400.0)
