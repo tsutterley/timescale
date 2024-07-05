@@ -199,6 +199,36 @@ def test_timescale():
     assert (ATLAS.asec2rad == np.pi/648000.0)
     assert (ATLAS.masec2rad == np.pi/0.648e12)
 
+def test_earth_rotation_angle():
+    """Test that the Earth rotation angle (ERA) matches expected outputs
+    """
+    # create timescale from modified Julian dates
+    ts = timescale.time.Timescale(MJD=55414.0)
+    # expected earth rotation angle as fraction of a turn
+    expected = 0.8730204642501604
+    assert np.isclose(360.0*expected, ts.era).all()
+
+def test_greenwich():
+    """Test approximations of Greenwich Hour Angle in degrees
+    using Meeus approximation and calculation within pyTMD
+    """
+    # create timescale from modified Julian dates
+    ts = timescale.time.Timescale(MJD=55414.0)
+    # Meeus approximation
+    hour_angle = 280.46061837504 + 360.9856473662862*(ts.T*36525.0)
+    GHA = np.mod(hour_angle, 360.0)
+    # compare with pyTMD calculation
+    assert np.isclose(GHA, ts.gha)
+
+def test_sidereal():
+    """Test that the sidereal time matches expected outputs
+    """
+    # create timescale from modified Julian dates
+    ts = timescale.time.Timescale(MJD=55414.0)
+    # expected side real time in hours
+    expected = 20.96154017401333
+    assert np.isclose(expected, 24.0*ts.st).all()
+
 # PURPOSE: update delta time files and values
 def test_update_delta_time(username, password):
     timescale.time.merge_delta_time(username=username, password=password)
