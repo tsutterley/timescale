@@ -17,6 +17,7 @@ PROGRAM DEPENDENCIES:
 
 UPDATE HISTORY:
     Updated 06/2024: assert that year, month, day, etc are float64
+        added conversions between common epochs and MJD
     Updated 05/2024: add Calendar class to mimick datetime functions
     Updated 04/2024: added quarter year approximate conversions
         added _from_sec dictionary for named time units
@@ -96,14 +97,25 @@ _to_sec['quarters'] = 365.25 * 86400.0 / 4.0
 # conversion factors from seconds to named time units
 _from_sec = {k: 1.0/v for k,v in _to_sec.items()}
 
-# standard epochs
+# standard (common) epochs
 _mjd_epoch = (1858, 11, 17, 0, 0, 0)
 _ntp_epoch = (1900, 1, 1, 0, 0, 0)
+_cnes_epoch = (1950, 1, 1, 0, 0, 0)
 _unix_epoch = (1970, 1, 1, 0, 0, 0)
 _gps_epoch = (1980, 1, 6, 0, 0, 0)
 _tide_epoch = (1992, 1, 1, 0, 0, 0)
 _j2000_epoch = (2000, 1, 1, 12, 0, 0)
 _atlas_sdp_epoch = (2018, 1, 1, 0, 0, 0)
+# number of days between the Julian day epoch and MJD
+_jd_mjd = 2400000.5
+# number of days between MJD and the standard (common) epochs
+_mjd_ntp = 15020
+_mjd_cnes = 33282
+_mjd_unix = 40587
+_mjd_gps = 44244
+_mjd_tide = 48622
+_mjd_j2000 = 51544.5
+_mjd_atlas_sdp = 58119
 
 # PURPOSE: parse a date string and convert to a datetime object in UTC
 def parse(date_string: str):
@@ -350,7 +362,7 @@ def convert_calendar_dates(
     MJD = 367.0*year - np.floor(7.0*(year + np.floor((month+9.0)/12.0))/4.0) - \
         np.floor(3.0*(np.floor((year + (month - 9.0)/7.0)/100.0) + 1.0)/4.0) + \
         np.floor(275.0*month/9.0) + day + hour/24.0 + minute/1440.0 + \
-        second/86400.0 + 1721028.5 - 2400000.5
+        second/86400.0 + 1721028.5 - _jd_mjd
     # convert epochs to datetime variables
     epoch1 = np.datetime64(datetime.datetime(*_mjd_epoch))
     if isinstance(epoch, (tuple, list)):
@@ -757,7 +769,7 @@ class Timescale:
             np.floor(1.75*(year + np.floor((month + 9.0)/12.0))) - \
             np.floor(0.75*(np.floor((year + (month - 9.0)/7.0)/100.0) + 1.0)) + \
             np.floor(275.0*month/9.0) + day + hour/24.0 + minute/1440.0 + \
-            second/86400.0 + 1721028.5 - 2400000.5
+            second/86400.0 + 1721028.5 - _jd_mjd
         return self
 
     def from_datetime(self, dtime: np.ndarray):
@@ -874,7 +886,7 @@ class Timescale:
         """Earth Rotation Angle (ERA) in degrees
         """
         # earth rotation angle using Universal Time
-        J = self.MJD - 51544.5
+        J = self.MJD - _mjd_j2000
         fraction = np.mod(J, self.turn)
         theta = np.mod(0.7790572732640 + 0.00273781191135448*J, self.turn)
         return self.turndeg*np.mod(theta + fraction, self.turn)
@@ -911,7 +923,8 @@ class Timescale:
     def J2000(self):
         """Seconds since 2000-01-01T12:00:00
         """
-        return (self.tt - 2451545.0)*self.day
+        _jd_j2000 = _jd_mjd + _mjd_j2000
+        return (self.tt - _jd_j2000)*self.day
 
     @timescale.utilities.reify
     def st(self):
@@ -929,13 +942,13 @@ class Timescale:
     def tide(self):
         """Days since 1992-01-01T00:00:00
         """
-        return self.MJD - 48622.0
+        return self.MJD - _mjd_tide
 
     @timescale.utilities.reify
     def tt(self):
         """Dynamic Time (TT) as Julian Days
         """
-        return self.MJD + self.tt_ut1 + 2400000.5
+        return self.MJD + self.tt_ut1 + _jd_mjd
 
     @timescale.utilities.reify
     def tt_ut1(self):
@@ -949,13 +962,14 @@ class Timescale:
     def T(self):
         """Centuries since 2000-01-01T12:00:00
         """
-        return (self.tt - 2451545.0)/self.century
+        _jd_j2000 = _jd_mjd + _mjd_j2000
+        return (self.tt - _jd_j2000)/self.century
 
     @timescale.utilities.reify
     def ut1(self):
         """Universal Time (UT) as Julian Days
         """
-        return self.MJD + 2400000.5
+        return self.MJD + _jd_mjd
 
     @timescale.utilities.reify
     def year(self):
@@ -1750,7 +1764,7 @@ def read_iers_bulletin_a(fileID):
     # TAI time is ahead of GPS by 19 seconds
     TAI_GPS = 19.0
     # calculate calendar dates from Modified Julian days
-    Y,M,D,h,m,s = convert_julian(MJD[:valid]+2400000.5, format='tuple')
+    Y,M,D,h,m,s = convert_julian(MJD[:valid] + _jd_mjd, format='tuple')
     # calculate GPS Time (seconds since 1980-01-06T00:00:00)
     # by converting the Modified Julian days (days since 1858-11-17T00:00:00)
     GPS_Time = convert_delta_time(MJD[:valid]*8.64e4, epoch1=_mjd_epoch,

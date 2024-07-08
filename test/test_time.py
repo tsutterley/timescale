@@ -229,6 +229,54 @@ def test_sidereal():
     expected = 20.96154017401333
     assert np.isclose(expected, 24.0*ts.st).all()
 
+def test_epochs():
+    """Test that the epoch conversions match expected outputs
+    """
+    # Modified Julian Day (MJD)
+    assert np.isclose(timescale.time._jd_mjd, 2400000.5)
+    # Network Time Protocol
+    mjd_ntp = timescale.time.convert_calendar_dates(
+        *timescale.time._ntp_epoch,
+        epoch=timescale.time._mjd_epoch)
+    assert np.isclose(mjd_ntp, timescale.time._mjd_ntp)
+    # CNES Julian Days
+    mjd_cnes = timescale.time.convert_calendar_dates(
+        *timescale.time._cnes_epoch,
+        epoch=timescale.time._mjd_epoch)
+    assert np.isclose(mjd_cnes, timescale.time._mjd_cnes)
+    # UNIX time
+    mjd_unix = timescale.time.convert_calendar_dates(
+        *timescale.time._unix_epoch,
+        epoch=timescale.time._mjd_epoch)
+    assert np.isclose(mjd_unix, timescale.time._mjd_unix)
+    # GPS time
+    mjd_gps = timescale.time.convert_calendar_dates(
+        *timescale.time._gps_epoch,
+        epoch=timescale.time._mjd_epoch)
+    assert np.isclose(mjd_gps, timescale.time._mjd_gps)   
+    # Tide time (1992-01-01) 
+    mjd_tide = timescale.time.convert_calendar_dates(
+        *timescale.time._tide_epoch,
+        epoch=timescale.time._mjd_epoch)
+    assert np.isclose(mjd_tide, timescale.time._mjd_tide)
+    assert np.isclose(timescale.time._mjd_tide, 48622.0)
+    # J2000 time
+    mjd_j2000 = timescale.time.convert_calendar_dates(
+        *timescale.time._j2000_epoch,
+        epoch=timescale.time._mjd_epoch)
+    assert np.isclose(mjd_j2000, timescale.time._mjd_j2000)
+    _jd_j2000 = timescale.time._jd_mjd + timescale.time._mjd_j2000
+    assert np.isclose(_jd_j2000, 2451545.0)
+    # ICESat-2 ATLAS Standard Data Product (ATLAS-SDP) epoch
+    mjd_atlas_sdp = timescale.time.convert_calendar_dates(
+        *timescale.time._atlas_sdp_epoch,
+        epoch=timescale.time._mjd_epoch)
+    assert np.isclose(mjd_atlas_sdp, timescale.time._mjd_atlas_sdp)
+    atlas_sdp_leaps = 18
+    atlas_sdp_gps_epoch = 86400*(timescale.time._mjd_atlas_sdp -
+        timescale.time._mjd_gps) + atlas_sdp_leaps
+    assert np.isclose(atlas_sdp_gps_epoch, 1198800018)
+
 # PURPOSE: update delta time files and values
 def test_update_delta_time(username, password):
     timescale.time.merge_delta_time(username=username, password=password)
