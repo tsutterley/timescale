@@ -30,6 +30,12 @@ def from_datetime(*args, **kwargs):
     """Wrapper for ``timescale.time.Timescale().from_datetime``
     """
     return timescale.time.Timescale().from_datetime(*args, **kwargs)
+# range of dates
+def from_range(start, end, *args, **kwargs):
+    """Wrapper for creating a ``Timescale`` object from a range of dates
+    """
+    d = timescale.time.date_range(start, end, *args, **kwargs)
+    return timescale.time.Timescale().from_datetime(d)
 # list of timescale objects
 def from_list(*args, **kwargs):
     """Wrapper for ``timescale.time.Timescale().from_list``
