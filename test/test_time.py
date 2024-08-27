@@ -253,8 +253,8 @@ def test_epochs():
     mjd_gps = timescale.time.convert_calendar_dates(
         *timescale.time._gps_epoch,
         epoch=timescale.time._mjd_epoch)
-    assert np.isclose(mjd_gps, timescale.time._mjd_gps)   
-    # Tide time (1992-01-01) 
+    assert np.isclose(mjd_gps, timescale.time._mjd_gps)
+    # Tide time (1992-01-01)
     mjd_tide = timescale.time.convert_calendar_dates(
         *timescale.time._tide_epoch,
         epoch=timescale.time._mjd_epoch)

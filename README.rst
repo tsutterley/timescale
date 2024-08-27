@@ -9,7 +9,7 @@ timescale
 |Documentation Status|
 |zenodo|
 
-.. |Language| image:: https://img.shields.io/pypi/pyversions/pyTMD?color=green
+.. |Language| image:: https://img.shields.io/pypi/pyversions/timescale?color=green
    :target: https://www.python.org/
 
 .. |License| image:: https://img.shields.io/github/license/tsutterley/timescale

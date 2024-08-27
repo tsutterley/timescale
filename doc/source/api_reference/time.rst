@@ -53,6 +53,8 @@ General Methods
 
 .. autofunction:: timescale.time.datetime_to_list
 
+.. autofunction:: timescale.time.date_range
+
 .. autofunction:: timescale.time.calendar_days
 
 .. autofunction:: timescale.time.convert_datetime

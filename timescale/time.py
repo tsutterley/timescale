@@ -211,6 +211,44 @@ def datetime_to_list(date):
     return [date.year, date.month, date.day,
             date.hour, date.minute, date.second]
 
+# PURPOSE: create a range of dates
+def date_range(
+        start: str | np.datetime64 | datetime.datetime,
+        end: str | np.datetime64 | datetime.datetime,
+        step: int | float = 1,
+        units: str = 'D'
+    ):
+    """
+    Create a range of dates
+
+    Parameters
+    ----------
+    start: str, np.datetime64 or datetime.datetime
+        start date
+    end: str, np.datetime64 or datetime.datetime
+        end date
+    step: int or float, default 1
+        step size
+    units: str, default 'D'
+        datetime units
+
+            - ``'Y'``: year
+            - ``'M'``: month
+            - ``'W'``: week
+            - ``'D'``: day
+            - ``'h'``: hour
+            - ``'m'``: minute
+            - ``'s'``: second
+            - ``'ms'``: millisecond
+    """
+    # convert start and end dates to datetime64
+    if isinstance(start, str):
+        start = np.array(parse(start), dtype=f'datetime64[{units}]')
+    if isinstance(end, str):
+        end = np.array(parse(end), dtype=f'datetime64[{units}]')
+    # create date range
+    return np.arange(start, end + step, step)
+
 # days per month in a leap and a standard year
 # only difference is February (29 vs. 28)
 _dpm_leap = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
@@ -1228,7 +1266,7 @@ def update_leap_seconds(
         pass
     else:
         return
-    
+
     # try downloading from Paris Observatory IERS Centers
     REMOTE = ['https://hpiers.obspm.fr','iers','bul','bulc','ntp',FILE]
     try:
@@ -1243,7 +1281,7 @@ def update_leap_seconds(
         pass
     else:
         return
-    
+
     # try downloading from Internet Assigned Numbers Authority (IANA)
     REMOTE = ['https://data.iana.org','time-zones','data',FILE]
     try:
