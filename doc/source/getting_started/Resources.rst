@@ -9,6 +9,11 @@ Resources
 - `IERS Daily Earth Orientation Parameters (EOP) from NASA CDDIS <ftp://cddis.nasa.gov/products/iers/finals.all>`_
 - `GPS week calendars <https://geodesy.noaa.gov/CORS/resources/GPS_CALS/>`_
 
+Alternative Data Sources
+########################
+
+- `astropy-iers-data <https://github.com/astropy/astropy-iers-data>`_
+
 Software
 ########
 
