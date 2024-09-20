@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 u"""
 time.py
-Written by Tyler Sutterley (06/2024)
+Written by Tyler Sutterley (09/2024)
 Utilities for calculating time operations
 
 PYTHON DEPENDENCIES:
@@ -16,6 +16,7 @@ PROGRAM DEPENDENCIES:
     utilities.py: download and management utilities for syncing files
 
 UPDATE HISTORY:
+    Updated 09/2024: make Timescale and Calendar objects subscriptable
     Updated 06/2024: assert that year, month, day, etc are float64
         added conversions between common epochs and MJD
     Updated 05/2024: add Calendar class to mimick datetime functions
@@ -1077,6 +1078,13 @@ class Timescale:
         """
         return len(np.atleast_1d(self.MJD))
 
+    def __getitem__(self, ind):
+        """Subset ``Timescale`` object to indices
+        """
+        temp = Timescale()
+        temp.MJD = np.atleast_1d(self.MJD)[ind].copy()
+        return temp
+
     def __iter__(self):
         """Iterate over time values
         """
@@ -1111,6 +1119,57 @@ class Calendar:
         # convert Julian date to calendar
         for key, val in convert_julian(self.ut1).items():
             setattr(self, key, val)
+
+    @property
+    def dtype(self):
+        """Main data type of ``Calendar`` object"""
+        return self.ut1.dtype
+
+    @property
+    def shape(self):
+        """Dimensions of ``Calendar`` object
+        """
+        return np.shape(self.ut1)
+
+    @property
+    def ndim(self):
+        """Number of dimensions in ``Calendar`` object
+        """
+        return np.ndim(self.ut1)
+
+    def __str__(self):
+        """String representation of the ``Calendar`` object
+        """
+        properties = ['timescale.time.Calendar']
+        return '\n'.join(properties)
+
+    def __len__(self):
+        """Number of time values
+        """
+        return len(np.atleast_1d(self.ut1))
+
+    def __getitem__(self, ind):
+        """Subset ``Calendar`` object to indices
+        """
+        ut1 = np.atleast_1d(self.ut1)[ind].copy()
+        return Calendar(ut1=ut1)
+
+    def __iter__(self):
+        """Iterate over time values
+        """
+        self.__index__ = 0
+        return self
+
+    def __next__(self):
+        """Get the next time step
+        """
+        try:
+            ut1 = np.atleast_1d(self.ut1)[self.__index__].copy()
+        except IndexError as exc:
+            raise StopIteration from exc
+        # add to index
+        self.__index__ += 1
+        return Calendar(ut1=ut1)
 
 # PURPOSE: calculate the difference between universal time and dynamical time
 # by interpolating a delta time file to a given date
