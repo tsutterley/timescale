@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 u"""
 time.py
-Written by Tyler Sutterley (09/2024)
+Written by Tyler Sutterley (10/2024)
 Utilities for calculating time operations
 
 PYTHON DEPENDENCIES:
@@ -16,6 +16,7 @@ PROGRAM DEPENDENCIES:
     utilities.py: download and management utilities for syncing files
 
 UPDATE HISTORY:
+    Updated 10/2024: split is_leap from calendar_days function
     Updated 09/2024: make Timescale and Calendar objects subscriptable
     Updated 06/2024: assert that year, month, day, etc are float64
         added conversions between common epochs and MJD
@@ -255,20 +256,14 @@ def date_range(
 _dpm_leap = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 _dpm_stnd = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
-# PURPOSE: gets the number of days per month for a given year
-def calendar_days(year: int | float | np.ndarray) -> np.ndarray:
+def is_leap(year: int | float) -> bool:
     """
-    Calculates the number of days per month for a given year
+    Determines if a year is a leap year
 
     Parameters
     ----------
-    year: int, float or np.ndarray
+    year: int or float
         calendar year
-
-    Returns
-    -------
-    dpm: np.ndarray
-        number of days for each month
     """
     # Rules in the Gregorian calendar for a year to be a leap year:
     # divisible by 4, but not by 100 unless divisible by 400
@@ -281,10 +276,29 @@ def calendar_days(year: int | float | np.ndarray) -> np.ndarray:
     m100 = (year % 100)
     m400 = (year % 400)
     m4000 = (year % 4000)
-    # find indices for standard years and leap years using criteria
-    if ((m4 == 0) & (m100 != 0) | (m400 == 0) & (m4000 != 0)):
+    # determine if the year is a leap year using criteria
+    return ((m4 == 0) & (m100 != 0) | (m400 == 0) & (m4000 != 0))
+
+# PURPOSE: gets the number of days per month for a given year
+def calendar_days(year: int | float) -> np.ndarray:
+    """
+    Calculates the number of days per month for a given year
+
+    Parameters
+    ----------
+    year: int or float
+        calendar year
+
+    Returns
+    -------
+    dpm: np.ndarray
+        number of days for each month
+    """
+    # determine if the year is a leap year
+    # and return the number of days per month
+    if is_leap(year):
         return np.array(_dpm_leap, dtype=np.float64)
-    elif ((m4 != 0) | (m100 == 0) & (m400 != 0) | (m4000 == 0)):
+    else:
         return np.array(_dpm_stnd, dtype=np.float64)
 
 # PURPOSE: convert a numpy datetime array to delta times since an epoch
