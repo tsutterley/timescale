@@ -2,32 +2,54 @@
 timescale
 =========
 
-|Language|
 |License|
-|PyPI Version|
-|Anaconda-Server|
 |Documentation Status|
+|PyPI|
+|conda-forge|
 |zenodo|
 
-.. |Language| image:: https://img.shields.io/pypi/pyversions/timescale?color=green
-   :target: https://www.python.org/
 
 .. |License| image:: https://img.shields.io/github/license/tsutterley/timescale
    :target: https://github.com/tsutterley/timescale/blob/main/LICENSE
 
-.. |PyPI Version| image:: https://img.shields.io/pypi/v/timescale.svg
-   :target: https://pypi.python.org/pypi/timescale/
-
-.. |Anaconda-Server| image:: https://img.shields.io/conda/vn/conda-forge/timescale
-   :target: https://anaconda.org/conda-forge/timescale
-
 .. |Documentation Status| image:: https://readthedocs.org/projects/timescale/badge/?version=latest
    :target: https://timescale.readthedocs.io/en/latest/?badge=latest
+
+.. |PyPI| image:: https://img.shields.io/pypi/v/timescale.svg
+   :target: https://pypi.python.org/pypi/timescale/
+
+.. |conda-forge| image:: https://img.shields.io/conda/vn/conda-forge/timescale
+   :target: https://anaconda.org/conda-forge/timescale
 
 .. |zenodo| image:: https://zenodo.org/badge/681330279.svg
    :target: https://zenodo.org/badge/latestdoi/681330279
 
 Python tools for time and astronomical calculations
+
+Installation
+############
+
+From PyPI:
+
+.. code-block:: bash
+
+   python3 -m pip install timescale
+
+Using `conda` or `mamba` from conda-forge:
+
+.. code-block:: bash
+
+   conda install -c conda-forge timescale
+
+.. code-block:: bash
+
+   mamba install -c conda-forge timescale
+
+Development version from GitHub:
+
+.. code-block:: bash
+
+   python3 -m pip install git+https://github.com/tsutterley/timescale.git
 
 Dependencies
 ############

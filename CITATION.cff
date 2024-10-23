@@ -1,0 +1,45 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: timescale
+message: Python tools for time and astronomical calculations
+type: software
+authors:
+  - given-names: Tyler
+    family-names: Sutterley
+    affiliation: University of Washington, Applied Physics Laboratory
+  - given-names: Karen
+    family-names: Alley
+    affiliation: University of Manitoba
+  - given-names: Kelly
+    family-names: Brunt
+    affiliation: NASA Goddard Space Flight Center
+  - given-names: Susan
+    family-names: Howard
+    affiliation: Earth & Space Research
+  - given-names: Laurie
+    family-names: Padman
+    affiliation: Earth & Space Research
+  - given-names: Matthew
+    family-names: Siegfried
+    affiliation: Colorado School of Mines
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.8284224
+    description: Zenodo Archive
+repository-code: 'https://github.com/tsutterley/timescale'
+url: 'https://timescale.readthedocs.io'
+repository: 'https://pypi.org/project/timescale'
+repository-artifact: 'https://anaconda.org/conda-forge/timescale'
+doi: "10.5281/zenodo.8284224"
+version: "0.0.5"
+date-released: "2024-09-10"
+keywords:
+  - Time
+  - Leap Seconds
+  - TAI
+  - GPS
+  - UT1
+  - TT
+license: MIT
