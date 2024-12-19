@@ -313,7 +313,7 @@ def iers_mean_pole(
     ):
     """
     Calculates the angular coordinates of the IERS Conventional Mean Pole (CMP)
-    or IERS Secular Pole (2018 convention)
+    or IERS Secular Pole (2018 convention) :cite:p:`Petit:2010tp`
 
     Parameters
     ----------
@@ -340,13 +340,6 @@ def iers_mean_pole(
         Angular coordinate y of conventional mean pole or secular pole
     flag: np.ndarray
         epoch is valid for version and version number is valid
-
-    References
-    ----------
-    .. [1] G. Petit and B. Luzum (eds.), *IERS Conventions (2010)*,
-        International Earth Rotation and Reference Systems Service (IERS),
-        `IERS Technical Note No. 36
-        <https://iers-conventions.obspm.fr/content/tn36.pdf>`_
     """
     # set default keyword arguments
     kwargs.setdefault('file', _mean_pole_file)
@@ -423,6 +416,7 @@ def iers_mean_pole(
 def iers_daily_EOP(input_file: str | pathlib.Path = _finals_file):
     """
     Read daily earth orientation parameters (EOP) file from IERS
+    :cite:p:`Petit:2010tp`
 
     Parameters
     ----------
@@ -437,13 +431,6 @@ def iers_daily_EOP(input_file: str | pathlib.Path = _finals_file):
         Angular coordinate x [arcsec]
     y: np.ndarray
         Angular coordinate y [arcsec]
-
-    References
-    ----------
-    .. [1] G. Petit and B. Luzum (eds.), *IERS Conventions (2010)*,
-        International Earth Rotation and Reference Systems Service (IERS),
-        `IERS Technical Note No. 36
-        <https://iers-conventions.obspm.fr/content/tn36.pdf>`_
     """
     # tilde-expansion of input file
     input_file = pathlib.Path(input_file).expanduser().absolute()
@@ -487,6 +474,7 @@ def iers_polar_motion(
     ):
     """
     Interpolates daily earth orientation parameters (EOP) file from IERS
+    :cite:p:`Petit:2010tp`
 
     Parameters
     ----------
@@ -505,13 +493,6 @@ def iers_polar_motion(
         Angular coordinate x [arcsec]
     py: np.ndarray
         Angular coordinate y [arcsec]
-
-    References
-    ----------
-    .. [1] G. Petit and B. Luzum (eds.), *IERS Conventions (2010)*,
-        International Earth Rotation and Reference Systems Service (IERS),
-        `IERS Technical Note No. 36
-        <https://iers-conventions.obspm.fr/content/tn36.pdf>`_
     """
     # set default parameters
     kwargs.setdefault('k', 3)

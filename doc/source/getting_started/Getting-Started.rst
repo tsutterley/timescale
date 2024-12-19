@@ -17,14 +17,9 @@ The `time module <https://github.com/tsutterley/timescale/blob/main/timescale/ti
 - LORAN time: Atomic timing system for the Loran-C chain transmitter sites used in terrestrial radionavigation. LORAN time and UTC time were equal on January 1, 1958. TAI time is ahead of LORAN time by 10 seconds.
 
 ``timescale`` also keeps updated `tables of delta times <https://github.com/tsutterley/timescale/blob/main/timescale/data/merged_deltat.data>`_ for converting between dynamic (TT) and universal (UT1) times.
-Delta times (TT - UT1) are the differences between Dynamic Time (TT) and Universal Time (UT1) [Meeus1998]_.
+Delta times (TT - UT1) are the differences between Dynamic Time (TT) and Universal Time (UT1) :cite:p:`Meeus:1991vh`.
 Universal Time (UT1) is based on the rotation of the Earth,
 which varies irregularly, and so UT1 is adjusted periodically.
 Dynamic Time (TT) is a uniform, monotonically increasing time standard based on atomic clocks that is
 used for the accurate calculation of celestial mechanics, orbits and ephemerides.
 Delta times can be added to Universal Time (UT1) values to convert to Dynamic Time (TT) values.
-
-References
-##########
-
-.. [Meeus1998] J. Meeus, *Astronomical Algorithms*, 2nd edition, 477 pp., (1998).
