@@ -29,3 +29,10 @@ Python tools for time and astronomical calculations
     :caption: Release Notes
 
     release_notes/Release-Notes.rst
+
+.. toctree::
+    :maxdepth: 1
+    :hidden:
+    :caption: Bibliography
+
+    getting_started/Bibliography.rst

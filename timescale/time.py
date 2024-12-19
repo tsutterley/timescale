@@ -101,6 +101,7 @@ _from_sec = {k: 1.0/v for k,v in _to_sec.items()}
 
 # standard (common) epochs
 _mjd_epoch = (1858, 11, 17, 0, 0, 0)
+_serial_epoch = (0, 1, 1, 0, 0, 0)
 _ntp_epoch = (1900, 1, 1, 0, 0, 0)
 _cnes_epoch = (1950, 1, 1, 0, 0, 0)
 _unix_epoch = (1970, 1, 1, 0, 0, 0)
@@ -108,8 +109,9 @@ _gps_epoch = (1980, 1, 6, 0, 0, 0)
 _tide_epoch = (1992, 1, 1, 0, 0, 0)
 _j2000_epoch = (2000, 1, 1, 12, 0, 0)
 _atlas_sdp_epoch = (2018, 1, 1, 0, 0, 0)
-# number of days between the Julian day epoch and MJD
+# number of days between the Julian day epoch and standard epochs
 _jd_mjd = 2400000.5
+_jd_serial = 1721058.5
 # number of days between MJD and the standard (common) epochs
 _mjd_ntp = 15020
 _mjd_cnes = 33282
@@ -118,6 +120,7 @@ _mjd_gps = 44244
 _mjd_tide = 48622
 _mjd_j2000 = 51544.5
 _mjd_atlas_sdp = 58119
+_mjd_serial = _jd_serial - _jd_mjd
 
 # PURPOSE: parse a date string and convert to a datetime object in UTC
 def parse(date_string: str):
@@ -439,7 +442,7 @@ def convert_calendar_decimal(
     ) -> np.ndarray:
     """
     Converts from calendar date into decimal years taking into
-    account leap years
+    account leap years :cite:p:`Dershowitz:2007cc`
 
     Parameters
     ----------
@@ -462,12 +465,6 @@ def convert_calendar_decimal(
     -------
     t_date: np.ndarray
         date in decimal-year format
-
-    References
-    ----------
-    .. [1] N. Dershowitz, and E. M. Reingold.
-        *Calendrical Calculations*,
-        Cambridge: Cambridge University Press, (2008).
     """
 
     # number of dates
@@ -587,6 +584,7 @@ def convert_calendar_decimal(
 def convert_julian(JD: np.ndarray, **kwargs):
     """
     Converts from Julian day to calendar date and time
+    :cite:p:`Press:1988we` :cite:p:`Hatcher:1984uo`
 
     Parameters
     ----------
@@ -615,15 +613,6 @@ def convert_julian(JD: np.ndarray, **kwargs):
         minute of the hour
     second: np.ndarray
         second of the minute
-
-    References
-    ----------
-    .. [1] W. H. Press, *Numerical Recipes in C*,
-        Brian P. Flannery, Saul A. Teukolsky, and William T. Vetterling.
-        Cambridge University Press, (1988).
-    .. [2] D. A. Hatcher, "Simple Formulae for Julian Day Numbers and
-        Calendar Dates", *Quarterly Journal of the Royal Astronomical
-        Society*, 25(1), 1984.
     """
     # set default keyword arguments
     kwargs.setdefault('astype', None)
@@ -1193,7 +1182,7 @@ def interpolate_delta_time(
     ):
     """
     Calculates the difference between universal time (UT) and
-    dynamical time (TT)
+    dynamical time (TT) :cite:p:`Meeus:1991vh`
 
     Parameters
     ----------
@@ -1206,10 +1195,6 @@ def interpolate_delta_time(
     -------
     deltat: float
         delta time at the input time
-
-    References
-    ----------
-    .. [1] J. Meeus, *Astronomical Algorithms*, 2nd edition, 477 pp., (1998).
     """
     # read delta time file
     delta_file = pathlib.Path(delta_file).expanduser().absolute()

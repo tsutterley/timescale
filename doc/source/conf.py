@@ -38,8 +38,9 @@ release = f"v{version}"
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "sphinx.ext.autodoc",
     "numpydoc",
+    'sphinxcontrib.bibtex',
+    "sphinx.ext.autodoc",
     "sphinx.ext.graphviz",
     "sphinx.ext.viewcode",
     "sphinxarg.ext"
@@ -61,11 +62,13 @@ autosummary_generate = True
 autodoc_member_order = 'bysource'
 numpydoc_show_class_members = False
 pygments_style = 'native'
+bibtex_bibfiles = ['_assets/timescale-refs.bib']
+bibtex_default_style = 'plain'
 
 # -- Options for HTML output -------------------------------------------------
 
-# html_title = "timescale"
-html_short_title = "timescale"
+# html_title = metadata["Name"]
+html_short_title = metadata["Name"]
 html_show_sourcelink = False
 html_show_sphinx = True
 html_show_copyright = True
@@ -83,7 +86,14 @@ html_theme_options = {
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_logo = "_assets/timescale_logo.png"
 html_static_path = ['_static']
-repository_url = f"https://github.com/tsutterley/timescale"
+# fetch the project urls
+project_urls = {}
+for project_url in metadata.get_all('Project-URL'):
+    name, _, url = project_url.partition(', ')
+    project_urls[name.lower()] = url
+# fetch the repository url
+repository_url = project_urls.get('repository')
+# add html context
 html_context = {
     "menu_links": [
         (
