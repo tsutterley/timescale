@@ -86,6 +86,7 @@ Credits
 #######
 
 This project contains work and contributions from the `scientific community <./CONTRIBUTORS.rst>`_.
+If you would like to contribute to the project, please have a look at the `open issues <https://github.com/tsutterley/timescale/issues>`_ and `discussions board <https://github.com/tsutterley/timescale/discussions>`_.
 
 License
 #######
